@@ -1,8 +1,9 @@
 {
-  "name": "react-images-upload",
+  "name": "react-images-upload-disabled",
   "version": "1.2.7",
   "private": false,
   "main": "compiled.js",
+  "description": "Original repository is react-images-upload. This one only adds the disabled prop.",
   "repository": {
     "type": "git",
     "url": "https://github.com/jakehartnell/react-images-upload"
