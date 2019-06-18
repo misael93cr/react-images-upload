@@ -56,26 +56,34 @@ class ReactImageUploadComponent extends React.Component {
   onDropFile(e) {
     const files = e.target.files;
     const allFilePromises = [];
+    const newNotAcceptedFileType = [];
+    const newNotAcceptedFileSize = [];
 
     // Iterate over all uploaded files
     for (let i = 0; i < files.length; i++) {
       let f = files[i];
       // Check for file extension
       if (!this.hasExtension(f.name)) {
-        const newArray = this.state.notAcceptedFileType.slice();
-        newArray.push(f.name);
-        this.setState({notAcceptedFileType: newArray});
+        newNotAcceptedFileType.push(f.name);
         continue;
       }
       // Check for file size
       if(f.size > this.props.maxFileSize) {
-        const newArray = this.state.notAcceptedFileSize.slice();
-        newArray.push(f.name);
-        this.setState({notAcceptedFileSize: newArray});
+        newNotAcceptedFileSize.push(f.name);
         continue;
       }
 
       allFilePromises.push(this.readFile(f));
+    }
+
+    this.setState({		
+      notAcceptedFileType: newNotAcceptedFileType,		
+      notAcceptedFileSize: newNotAcceptedFileSize		
+    });
+
+    // If there are no promises, return
+    if (!allFilePromises.length) {
+      return;
     }
 
     Promise.all(allFilePromises).then(newFilesData => {
@@ -220,6 +228,7 @@ class ReactImageUploadComponent extends React.Component {
             type={this.props.buttonType}
             className={"chooseFileButton " + this.props.buttonClassName}
             style={this.props.buttonStyles}
+            disabled={this.props.disabled}
             onClick={this.triggerFileUpload}
           >
             {this.props.buttonText}
@@ -264,7 +273,8 @@ ReactImageUploadComponent.defaultProps = {
   errorStyle: {},
   singleImage: false,
   onChange: () => {},
-  defaultImages: []
+  defaultImages: [],
+  disabled: false
 };
 
 ReactImageUploadComponent.propTypes = {
@@ -292,7 +302,8 @@ ReactImageUploadComponent.propTypes = {
   errorClass: PropTypes.string,
   errorStyle: PropTypes.object,
   singleImage: PropTypes.bool,
-  defaultImages: PropTypes.array
+  defaultImages: PropTypes.array,
+  disabled: PropTypes.bool
 };
 
 export default ReactImageUploadComponent;
