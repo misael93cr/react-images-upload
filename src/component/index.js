@@ -115,7 +115,6 @@ class ReactImageUploadComponent extends React.Component {
       reader.onload = function (e) {
         // Add the file name to the data URL
         let dataURL = e.target.result;
-        dataURL = dataURL.replace(";base64", `;name=${file.name};base64`);
         resolve({file, dataURL});
       };
 
